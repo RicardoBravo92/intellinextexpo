@@ -72,6 +72,7 @@ export interface Device {
   id_device_model: number;
   settings_device: DeviceSettings;
   status: number;
+  //not in id
   device_model: string;
   factory_family: string;
   photo: string;
@@ -85,5 +86,17 @@ export interface DevicesResponse {
   data: {
     results: Device[];
     count: number;
+    limit: number;
+    offset: number;
+  };
+}
+export interface DeviceResponse {
+  status: number;
+  message: string;
+  data: {
+    result: Device;
+    count: number;
+    limit: number;
+    offset: number;
   };
 }

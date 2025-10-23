@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@env';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
@@ -29,7 +30,7 @@ export class StorageAdapter {
   }
 }
 
-const BASE_URL = process.env.API_BASE_URL;
+const BASE_URL = API_BASE_URL;
 const api = axios.create({
   baseURL: BASE_URL,
 });

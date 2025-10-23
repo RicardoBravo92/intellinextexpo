@@ -1,14 +1,14 @@
-import { Device, DevicesResponse } from "@/types";
+import { DeviceResponse, DevicesResponse } from "@/types";
 import { api } from "./api";
 
 export const getDevicesByPage = async (
-  page: number,
+  offset: number,
   limit: number = 20,
   search?: string,
-): Promise<DevicesResponse[]> => {
+): Promise<DevicesResponse> => {
   try {
-    const { data } = await api.get<DevicesResponse[]>(
-      `/devices?offset=${page * 10}&limit=${limit}&seerch=${search}`,
+    const { data } = await api.get<DevicesResponse>(
+      `/devices?offset=${offset}&limit=${limit}&search=${search}`,
     );
     return data;
   } catch (error) {
@@ -18,9 +18,9 @@ export const getDevicesByPage = async (
 };
 
 //get by id
-export const getDeviceById = async (id: number): Promise<Device> => {
+export const getDeviceById = async (id: number): Promise<DeviceResponse> => {
   try {
-    const { data } = await api.get<Device>(`/devices/${id}`);
+    const { data } = await api.get<DeviceResponse>(`/devices/${id}`);
     return data;
   } catch (error) {
     console.log(error);

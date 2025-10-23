@@ -19,8 +19,8 @@ import {
 
 export default function SignIn() {
   const { setAuthData } = useAuthStore();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("carlospea13+1@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -154,13 +154,6 @@ export default function SignIn() {
                   <Text style={styles.buttonText}>Sign In</Text>
                 )}
               </Pressable>
-            </View>
-
-            {/* Demo credentials hint */}
-            <View style={styles.demoHint}>
-              <Text style={styles.demoHintText}>
-                Demo credentials pre-filled
-              </Text>
             </View>
           </View>
         </ScrollView>
