@@ -100,19 +100,6 @@ export default function DeviceScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         <DeviceItemCard {...device} />
-
-        {/* Optional: Add a refresh button in the header */}
-        <TouchableOpacity
-          style={styles.floatingRefreshButton}
-          onPress={handleRefresh}
-          disabled={isFetching}
-        >
-          <Ionicons
-            name="refresh"
-            size={20}
-            color={isFetching ? "#999" : "#007AFF"}
-          />
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -199,18 +186,5 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-  },
-  floatingRefreshButton: {
-    position: "absolute",
-    top: 10,
-    right: 20,
-    backgroundColor: "white",
-    padding: 12,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
 });
