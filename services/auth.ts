@@ -1,12 +1,16 @@
-import { LoginResponse } from '@/types';
-import { api } from './api';
+import { LoginResponse } from "@/types";
+import { api } from "./api";
 
-export const authService = {
-  login: async (email: string, password: string): Promise<LoginResponse> => {
-    const response = await api.post('/login', {
+export const authLogin = async (email: string, password: string) => {
+  email = email.toLowerCase();
+
+  try {
+    const { data } = await api.post<LoginResponse>("/login", {
       email,
       password,
     });
-    return response.data;
-  },
+    return { data };
+  } catch (error) {
+    throw error;
+  }
 };

@@ -1,41 +1,70 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { useAuthStore } from "@/store/authStore";
+import { Ionicons } from "@expo/vector-icons";
+import { Redirect, Tabs } from "expo-router";
 
-export default function TabLayout() {
+export default function TabsLayout() {
+  const { isAuthenticated } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return <Redirect href="/welcome" />;
+  }
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
+        tabBarActiveTintColor: "#007AFF",
         headerShown: false,
+        tabBarStyle: {
+          backgroundColor: "#f5f5f5",
+          borderTopWidth: 0,
+          elevation: 0,
+        },
       }}
     >
       <Tabs.Screen
-        name='index'
+        name="index"
         options={{
-          title: 'Home',
+          title: "Modulos",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name='home' size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name='devices'
+        name="devices"
         options={{
-          title: 'Devices',
+          title: "Devices",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name='game-controller' size={size} color={color} />
+            <Ionicons name="game-controller" size={size} color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
-        name='profile'
+        name="devices/[id]"
         options={{
-          title: 'Profile',
+          title: "Device",
+          headerShown: false,
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="modules/[id]"
+        options={{
+          title: "Module",
+          headerShown: false,
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name='person' size={size} color={color} />
+            <Ionicons name="settings" size={size} color={color} />
           ),
         }}
       />

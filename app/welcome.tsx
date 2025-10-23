@@ -1,11 +1,19 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import { router } from "expo-router";
+import React from "react";
+import { Button, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const welcome = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Text>welcome</Text>
-    </View>
+      <Button
+        title="Go to Sign In"
+        onPress={() => {
+          router.push("/(auth)/sign-in");
+        }}
+      />
+    </SafeAreaView>
   );
 };
 
