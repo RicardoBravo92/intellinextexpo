@@ -1,7 +1,6 @@
-import { API_BASE_URL } from '@env';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import { useAuthStore } from "../store/authStore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { useAuthStore } from '../store/authStore';
 
 export class StorageAdapter {
   static async getItem(key: string): Promise<string | null> {
@@ -30,7 +29,7 @@ export class StorageAdapter {
   }
 }
 
-const BASE_URL = API_BASE_URL;
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 const api = axios.create({
   baseURL: BASE_URL,
 });
@@ -44,9 +43,9 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.request.use(async (config) => {
-  const token = await StorageAdapter.getItem("token");
+  const token = await StorageAdapter.getItem('token');
   if (token) {
-    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers['Authorization'] = `Bearer ${token}`;
   }
 
   return config;
