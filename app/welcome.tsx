@@ -10,19 +10,21 @@ export default function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Bienvenido a IntelliNext</Text>
-        <Text style={styles.subtitle}>Gestiona tus dispositivos IoT</Text>
+        <Text style={styles.title}>Welcomt to IntelliNext</Text>
+        <Text style={styles.subtitle}>
+          Your ultimate AI-powered learning companion
+        </Text>
       </View>
       {!isAuthenticated && (
         <Button
-          title="Iniciar Sesión"
+          title="Sign in"
           onPress={() => router.push("/(auth)/sign-in")}
           color={Colors.light.tint}
         />
       )}
       {isAuthenticated && (
         <Button
-          title="Ir a la aplicación"
+          title="Go to the app"
           onPress={() => router.push("/")}
           color={Colors.light.tint}
         />

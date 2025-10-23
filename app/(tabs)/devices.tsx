@@ -1,5 +1,5 @@
 import DeviceCard from "@/components/DeviceCard";
-import { getDevicesByPage } from "@/services/devices";
+import { useDevices } from "@/hooks/useDevices";
 import { Device } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -18,66 +18,29 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const DevicesScreen = () => {
-  const [devices, setDevices] = useState<Device[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [limit] = useState(20);
-  const [offset, setOffset] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
 
-  // Load devices - always loads 20 devices
-  const loadDevices = async (isLoadMore = false) => {
-    try {
-      if (isLoadMore) {
-        setLoadingMore(true);
-      } else {
-        setLoading(true);
-      }
+  const {
+    devices,
+    isLoading,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+    error,
+    isError,
+  } = useDevices({ search });
 
-      setError(null);
-
-      const currentOffset = isLoadMore ? offset : 0;
-
-      const { data } = await getDevicesByPage(currentOffset, limit, search);
-
-      if (data) {
-        const { results } = data;
-
-        if (isLoadMore) {
-          setDevices((prevDevices) => [...prevDevices, ...results]);
-        } else {
-          setDevices(results);
-        }
-
-        // Always set offset to limit (20) for next load
-        setOffset(limit);
-      }
-    } catch (err: any) {
-      console.log("Error loading devices:", err);
-      setError(err.message || "Failed to load devices");
-      Alert.alert("Error", err.message || "Failed to load devices");
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-      setRefreshing(false);
-    }
-  };
-
-  // Handle refresh - loads first 20 devices
+  // Handle refresh
   const handleRefresh = () => {
-    setRefreshing(true);
-    setOffset(0);
-    loadDevices();
+    refetch();
   };
 
-  // Handle search - loads first 20 devices matching search
+  // Handle search
   const handleSearch = () => {
     setSearch(searchInput);
-    setOffset(0);
-    setDevices([]); // Clear devices before new search
   };
 
   // Handle device press
@@ -85,48 +48,46 @@ const DevicesScreen = () => {
     router.push(`/devices/${device.id_device}`);
   };
 
-  // Handle load more - loads next 20 devices
+  // Handle load more
   const handleLoadMore = () => {
-    loadDevices(true);
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
   };
 
-  // Initial load - loads first 20 devices
-  useEffect(() => {
-    loadDevices();
-  }, []);
-
-  // Load first 20 devices when search changes
-  useEffect(() => {
-    if (search !== "") {
-      setOffset(0);
-      loadDevices();
-    }
-  }, [search]);
+  // Clear search
+  const handleClearSearch = () => {
+    setSearchInput("");
+    setSearch("");
+  };
 
   const renderDeviceItem = ({ item }: { item: Device }) => (
     <DeviceCard device={item} onPress={handleDevicePress} />
   );
 
   const renderFooter = () => {
-    if (loadingMore) {
+    if (isFetchingNextPage) {
+      return <ActivityIndicator />;
+    }
+
+    if (hasNextPage && devices.length > 0) {
       return (
-        <View style={styles.footerLoader}>
-          <ActivityIndicator size="small" color="#007AFF" />
-          <Text style={styles.footerText}>Loading more devices...</Text>
+        <View style={styles.loadMoreContainer}>
+          <TouchableOpacity
+            style={styles.loadMoreButton}
+            onPress={handleLoadMore}
+            disabled={isFetchingNextPage}
+          >
+            <Text style={styles.loadMoreButtonText}>Load More</Text>
+          </TouchableOpacity>
         </View>
       );
     }
 
     if (devices.length > 0) {
       return (
-        <View style={styles.loadMoreContainer}>
-          <TouchableOpacity
-            style={styles.loadMoreButton}
-            onPress={handleLoadMore}
-            disabled={loadingMore}
-          >
-            <Text style={styles.loadMoreButtonText}>Load More</Text>
-          </TouchableOpacity>
+        <View style={styles.endOfList}>
+          <Text style={styles.endOfListText}>No more devices to load</Text>
         </View>
       );
     }
@@ -135,7 +96,7 @@ const DevicesScreen = () => {
   };
 
   const renderEmptyState = () => {
-    if (loading) return null;
+    if (isLoading) return null;
 
     return (
       <View style={styles.emptyState}>
@@ -151,6 +112,14 @@ const DevicesScreen = () => {
       </View>
     );
   };
+
+  useEffect(() => {
+    if (isError && error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to load devices";
+      Alert.alert("Error", errorMessage);
+    }
+  }, [isError, error]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -175,15 +144,7 @@ const DevicesScreen = () => {
             returnKeyType="search"
           />
           {searchInput ? (
-            <TouchableOpacity
-              onPress={() => {
-                setSearchInput("");
-                setSearch("");
-                setOffset(0);
-                setDevices([]);
-                loadDevices();
-              }}
-            >
+            <TouchableOpacity onPress={handleClearSearch}>
               <Ionicons name="close-circle" size={20} color="#999" />
             </TouchableOpacity>
           ) : null}
@@ -194,7 +155,7 @@ const DevicesScreen = () => {
       </View>
 
       {/* Devices Count */}
-      {!loading && (
+      {!isLoading && (
         <View style={styles.countContainer}>
           <Text style={styles.countText}>
             {devices.length} device{devices.length !== 1 ? "s" : ""}
@@ -204,10 +165,12 @@ const DevicesScreen = () => {
       )}
 
       {/* Devices List */}
-      {error ? (
+      {isError ? (
         <View style={styles.errorContainer}>
           <Ionicons name="warning-outline" size={48} color="#dc3545" />
-          <Text style={styles.errorText}>{error}</Text>
+          <Text style={styles.errorText}>
+            {error instanceof Error ? error.message : "Failed to load devices"}
+          </Text>
           <TouchableOpacity style={styles.retryButton} onPress={handleRefresh}>
             <Text style={styles.retryButtonText}>Try Again</Text>
           </TouchableOpacity>
@@ -223,15 +186,19 @@ const DevicesScreen = () => {
           ]}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            <RefreshControl
+              refreshing={isFetching && !isFetchingNextPage}
+              onRefresh={handleRefresh}
+            />
           }
           ListEmptyComponent={renderEmptyState}
           ListFooterComponent={renderFooter}
+          onEndReachedThreshold={0.5}
         />
       )}
 
       {/* Loading Overlay */}
-      {loading && !refreshing && (
+      {isLoading && !isFetchingNextPage && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#007AFF" />
           <Text style={styles.loadingText}>Loading devices...</Text>
@@ -241,6 +208,7 @@ const DevicesScreen = () => {
   );
 };
 
+// Keep the same styles as your original component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -308,7 +276,7 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 20,
     paddingTop: 0,
-    paddingBottom: 0, // Remove bottom padding since footer has its own
+    paddingBottom: 0,
   },
   emptyListContainer: {
     flexGrow: 1,
@@ -391,6 +359,15 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
+  },
+  endOfList: {
+    padding: 20,
+    alignItems: "center",
+  },
+  endOfListText: {
+    fontSize: 14,
+    color: "#666",
+    fontStyle: "italic",
   },
 });
 

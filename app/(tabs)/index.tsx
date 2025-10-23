@@ -21,7 +21,6 @@ export default function ModulesScreen() {
   const [offset, setOffset] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // Filter modules based on search
   const filteredModules = modules.filter(
     (mod) =>
       mod.module.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -30,7 +29,6 @@ export default function ModulesScreen() {
         .includes(searchTerm.toLowerCase()),
   );
 
-  // Initialize or reset displayed modules when search term changes
   useEffect(() => {
     setOffset(0);
     const initialModules = filteredModules.slice(0, limit);
@@ -47,7 +45,6 @@ export default function ModulesScreen() {
 
     setLoadingMore(true);
 
-    // Simulate loading delay for better UX
     setTimeout(() => {
       const nextModules = filteredModules.slice(offset, offset + limit);
       setDisplayedModules((prev) => [...prev, ...nextModules]);

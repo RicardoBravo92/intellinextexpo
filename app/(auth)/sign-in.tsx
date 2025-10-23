@@ -19,8 +19,8 @@ import {
 
 export default function SignIn() {
   const { setAuthData } = useAuthStore();
-  const [email, setEmail] = useState("carlospea13+1@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -66,11 +66,9 @@ export default function SignIn() {
         router.replace("/");
         setError("");
       } else if (response && "error" in response) {
-        // Handle API error response
         setError(response.error.message);
         Alert.alert("Login Failed", response.error.message);
       } else {
-        // Handle unexpected response format
         setError("Unexpected response from server");
         Alert.alert("Error", "Unexpected response from server");
       }
@@ -85,6 +83,11 @@ export default function SignIn() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const addCredential = () => {
+    setEmail("carlospea13+1@gmail.com");
+    setPassword("123456");
   };
 
   const clearError = () => {
@@ -154,6 +157,11 @@ export default function SignIn() {
                   <Text style={styles.buttonText}>Sign In</Text>
                 )}
               </Pressable>
+              {!email && !password && (
+                <Pressable onPress={addCredential} style={styles.button}>
+                  <Text style={styles.buttonText}>Add demo credentials</Text>
+                </Pressable>
+              )}
             </View>
           </View>
         </ScrollView>
