@@ -1,8 +1,7 @@
-import DeviceCard from "@/components/DeviceCard";
+import DeviceListCard from "@/components/DeviceListCard";
 import { useDevices } from "@/hooks/useDevices";
 import { Device } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -33,36 +32,27 @@ const DevicesScreen = () => {
     isError,
   } = useDevices({ search });
 
-  // Handle refresh
   const handleRefresh = () => {
     refetch();
   };
 
-  // Handle search
   const handleSearch = () => {
     setSearch(searchInput);
   };
 
-  // Handle device press
-  const handleDevicePress = (device: Device) => {
-    router.push(`/devices/${device.id_device}`);
-  };
-
-  // Handle load more
   const handleLoadMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
 
-  // Clear search
   const handleClearSearch = () => {
     setSearchInput("");
     setSearch("");
   };
 
   const renderDeviceItem = ({ item }: { item: Device }) => (
-    <DeviceCard device={item} onPress={handleDevicePress} />
+    <DeviceListCard {...item} />
   );
 
   const renderFooter = () => {
@@ -123,15 +113,12 @@ const DevicesScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Devices</Text>
         <Text style={styles.subtitle}>
           Manage and monitor your access devices
         </Text>
       </View>
-
-      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
           <Ionicons name="search" size={20} color="#666" />
@@ -153,8 +140,6 @@ const DevicesScreen = () => {
           <Ionicons name="arrow-forward" size={20} color="white" />
         </TouchableOpacity>
       </View>
-
-      {/* Devices Count */}
       {!isLoading && (
         <View style={styles.countContainer}>
           <Text style={styles.countText}>
@@ -163,8 +148,6 @@ const DevicesScreen = () => {
           </Text>
         </View>
       )}
-
-      {/* Devices List */}
       {isError ? (
         <View style={styles.errorContainer}>
           <Ionicons name="warning-outline" size={48} color="#dc3545" />
@@ -196,8 +179,6 @@ const DevicesScreen = () => {
           onEndReachedThreshold={0.5}
         />
       )}
-
-      {/* Loading Overlay */}
       {isLoading && !isFetchingNextPage && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#007AFF" />
@@ -208,7 +189,6 @@ const DevicesScreen = () => {
   );
 };
 
-// Keep the same styles as your original component
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -17,7 +17,6 @@ export const getDevicesByPage = async (
   }
 };
 
-//get by id
 export const getDeviceById = async (id: number): Promise<DeviceResponse> => {
   try {
     const { data } = await api.get<DeviceResponse>(`/devices/${id}`);

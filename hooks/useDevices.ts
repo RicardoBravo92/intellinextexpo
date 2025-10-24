@@ -1,4 +1,3 @@
-// hooks/useDevices.ts
 import { getDeviceById, getDevicesByPage } from "@/services/devices";
 import { Device } from "@/types";
 import { useFocusEffect } from "@react-navigation/native";
@@ -44,13 +43,9 @@ export const useDevices = (params: DevicesQueryParams = {}) => {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Reset the query when screen loses focus (optional)
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        // This will reset when screen goes out of focus
-        // You can choose to keep this or not based on your needs
-      };
+      return () => {};
     }, []),
   );
 
@@ -80,9 +75,6 @@ export const useDeviceMutations = () => {
     queryClient.invalidateQueries({ queryKey: [DEVICES_QUERY_KEY] });
   };
 
-  // You can add more mutations here as needed
-  // For example: createDevice, updateDevice, deleteDevice, etc.
-
   return {
     invalidateDevices,
   };
@@ -92,10 +84,9 @@ export const useDevice = (deviceId: number) => {
   const query = useQuery({
     queryKey: [DEVICE_QUERY_KEY, deviceId],
     queryFn: () => getDeviceById(deviceId),
-    enabled: !!deviceId, // Only run query if deviceId is truthy
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: !!deviceId,
+    staleTime: 5 * 60 * 1000,
     retry: (failureCount, error: any) => {
-      // Don't retry for 404 errors
       if (error?.status === 404) {
         return false;
       }

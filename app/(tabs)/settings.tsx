@@ -50,7 +50,6 @@ const SettingsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {/* Header */}
         <View style={styles.header}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
@@ -64,7 +63,6 @@ const SettingsScreen = () => {
           <Text style={styles.userEmail}>{user.email}</Text>
         </View>
 
-        {/* User Information Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Personal Information</Text>
 
@@ -102,7 +100,6 @@ const SettingsScreen = () => {
           </View>
         </View>
 
-        {/* Permissions & Roles Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Permissions & Roles</Text>
 

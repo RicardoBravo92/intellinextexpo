@@ -96,7 +96,6 @@ export default function ModulesScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Modules</Text>
         <Text style={styles.subtitle}>
@@ -104,7 +103,6 @@ export default function ModulesScreen() {
         </Text>
       </View>
 
-      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
           <Ionicons name="search" size={20} color="#666" />
@@ -125,8 +123,6 @@ export default function ModulesScreen() {
           <Ionicons name="arrow-forward" size={20} color="white" />
         </TouchableOpacity>
       </View>
-
-      {/* Modules Count */}
       <View style={styles.countContainer}>
         <Text style={styles.countText}>
           {displayedModules.length} of {filteredModules.length} module
@@ -138,8 +134,6 @@ export default function ModulesScreen() {
             } more available`}
         </Text>
       </View>
-
-      {/* Modules List */}
       <FlatList
         data={displayedModules}
         keyExtractor={(item) => item.id_module.toString()}

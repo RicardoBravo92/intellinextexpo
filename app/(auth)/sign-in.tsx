@@ -35,7 +35,6 @@ export default function SignIn() {
       return false;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address");
@@ -47,10 +46,8 @@ export default function SignIn() {
   };
 
   const handleLogin = async () => {
-    // Clear previous errors
     setError("");
 
-    // Validate form
     if (!validateForm()) {
       return;
     }
@@ -67,12 +64,9 @@ export default function SignIn() {
         setError("");
       }
     } catch (err: any) {
-      if (err.response?.data?.msg === "invalid_credentials") {
-        setError("Invalid credentials");
-        Alert.alert("Login Failed", "Invalid credentials");
-      } else {
-        setError("An error occurred during login");
-      }
+      const errorMsg = err.response?.data?.msg || "invalid credentials";
+      Alert.alert("Error", errorMsg);
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }

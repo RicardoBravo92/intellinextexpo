@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Module } from "../types";
 
-const ModuleCard = ({
+const ModuleItemCard = ({
   module,
   id_module,
   setting_module_config,
@@ -14,7 +14,6 @@ const ModuleCard = ({
 }: Module) => {
   const CardContent = (
     <View style={[styles.card && styles.selectedCard]}>
-      {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           {setting_module_config.key && (
@@ -29,7 +28,6 @@ const ModuleCard = ({
         )}
       </View>
 
-      {/* Main Content */}
       <Text style={styles.moduleName} numberOfLines={1}>
         {module}
       </Text>
@@ -44,7 +42,6 @@ const ModuleCard = ({
         </Text>
       )}
 
-      {/* Footer Section */}
       <View style={styles.footer}>
         <View style={styles.metaInfo}>
           {setting_module_config.position && (
@@ -80,7 +77,6 @@ const ModuleCard = ({
         </View>
       </View>
 
-      {/* Operations */}
       {operations && operations.length > 0 && (
         <View style={styles.operationsContainer}>
           <Text style={styles.operationsLabel}>Operations:</Text>
@@ -93,7 +89,7 @@ const ModuleCard = ({
   return CardContent;
 };
 
-export default ModuleCard;
+export default ModuleItemCard;
 
 const styles = StyleSheet.create({
   card: {
@@ -208,7 +204,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#888",
   },
-  // Your existing styles
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",

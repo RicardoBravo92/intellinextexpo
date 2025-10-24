@@ -37,7 +37,6 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Background Decoration */}
       <View style={styles.backgroundCircle} />
 
       <View style={styles.content}>
@@ -50,7 +49,6 @@ export default function WelcomeScreen() {
             },
           ]}
         >
-          {/* App Logo/Icon */}
           <View style={styles.logoContainer}>
             <Ionicons
               name="hardware-chip"
@@ -68,7 +66,6 @@ export default function WelcomeScreen() {
           </Text>
         </Animated.View>
 
-        {/* Features List */}
         <Animated.View
           style={[
             styles.features,
@@ -99,7 +96,6 @@ export default function WelcomeScreen() {
         </Animated.View>
       </View>
 
-      {/* Action Buttons */}
       <Animated.View
         style={[
           styles.footer,
@@ -125,14 +121,6 @@ export default function WelcomeScreen() {
           </>
         ) : (
           <>
-            <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={() => router.push("/modules")}
-            >
-              <Ionicons name="rocket" size={20} color="#fff" />
-              <Text style={styles.primaryButtonText}>Launch App</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity
               style={styles.secondaryButton}
               onPress={() => router.push("/devices")}
@@ -160,7 +148,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: Colors.light.tint + "20", // 20% opacity
+    backgroundColor: Colors.light.tint + "20",
   },
   content: {
     flex: 1,

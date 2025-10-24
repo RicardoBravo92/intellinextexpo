@@ -14,17 +14,12 @@ interface AuthState extends LoginResponse {
   checkAuth: () => boolean;
 }
 
-// Define the current version of your store
 const CURRENT_VERSION = 1;
 
-// Migration functions for different versions
 const migrations = {
   0: (persistedState: any): any => {
-    // Migration from version 0 to 1
-    // If you had a previous version without versioning, this handles it
     return {
       ...persistedState,
-      // Add any new fields with default values
       isLoading: false,
       version: {
         api: "",
@@ -32,8 +27,6 @@ const migrations = {
       },
     };
   },
-  // Add more migrations as needed when you change the store structure
-  // 1: (persistedState: any) => { ... }
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -119,7 +112,6 @@ export const useAuthStore = create<AuthState>()(
 
           let state = persistedState;
 
-          // Apply migrations in sequence from the stored version to current version
           for (let i = version; i < CURRENT_VERSION; i++) {
             const migration = migrations[i as keyof typeof migrations];
             if (migration) {
@@ -130,7 +122,6 @@ export const useAuthStore = create<AuthState>()(
           return state;
         } catch (error) {
           console.error("Migration failed, clearing storage:", error);
-          // If migration fails, return the initial state (logged out)
           return {
             token: "",
             user: {} as User,
@@ -171,7 +162,6 @@ export const useAuthStore = create<AuthState>()(
           }
         },
       })),
-      // Only persist these fields
       partialize: (state) => ({
         token: state.token,
         user: state.user,

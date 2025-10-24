@@ -22,12 +22,10 @@ export default function DeviceScreen() {
   const { device, isLoading, isError, error, refetch, isFetching } =
     useDevice(deviceId);
 
-  // Handle refresh
   const handleRefresh = () => {
     refetch();
   };
 
-  // Show error alert if there's an error
   React.useEffect(() => {
     if (isError && error) {
       const errorMessage =
@@ -36,7 +34,6 @@ export default function DeviceScreen() {
     }
   }, [isError, error]);
 
-  // Loading state
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -48,7 +45,6 @@ export default function DeviceScreen() {
     );
   }
 
-  // Error state
   if (isError) {
     return (
       <SafeAreaView style={styles.container}>
@@ -68,7 +64,6 @@ export default function DeviceScreen() {
     );
   }
 
-  // Device not found state
   if (!device) {
     return (
       <SafeAreaView style={styles.container}>
@@ -90,7 +85,6 @@ export default function DeviceScreen() {
     );
   }
 
-  // Success state
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

@@ -1,28 +1,18 @@
-// components/DeviceCard.tsx
 import { Device } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-interface DeviceCardProps {
-  device: Device;
-  onPress?: (device: Device) => void;
-}
-
-const DeviceCard: React.FC<DeviceCardProps> = ({ device, onPress }) => {
+const DeviceListCard = (device: Device) => {
   const handlePress = () => {
-    if (onPress) {
-      onPress(device);
-    } else {
-      router.push(`/devices/${device.id_device}`);
-    }
+    router.push(`/devices/${device.id_device}`);
   };
 
   const getStatusColor = (online: number, disabled?: number) => {
-    if (disabled === 1) return "#6c757d"; // Gray for disabled
-    if (online === 1) return "#28a745"; // Green for online
-    return "#dc3545"; // Red for offline
+    if (disabled === 1) return "#6c757d";
+    if (online === 1) return "#28a745";
+    return "#dc3545";
   };
 
   const getStatusText = (online: number, disabled?: number) => {
@@ -45,7 +35,6 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, onPress }) => {
   };
 
   const getInitials = (name: string) => {
-    // Tomar las primeras dos letras del nombre del dispositivo
     return name
       .split(" ")
       .slice(0, 2)
@@ -55,7 +44,6 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, onPress }) => {
   };
 
   const getBackgroundColor = (name: string) => {
-    // Generar un color basado en el nombre del dispositivo
     const colors = [
       "#FF6B6B",
       "#4ECDC4",
@@ -79,7 +67,6 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, onPress }) => {
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress}>
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.deviceInfo}>
           <Text style={styles.deviceName} numberOfLines={1}>
@@ -88,7 +75,6 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, onPress }) => {
           <Text style={styles.deviceModel}>{device.device_model}</Text>
         </View>
 
-        {/* Status Badge */}
         <View
           style={[
             styles.statusBadge,
@@ -109,7 +95,6 @@ const DeviceCard: React.FC<DeviceCardProps> = ({ device, onPress }) => {
         </View>
       </View>
 
-      {/* Content */}
       <View style={styles.content}>
         {device.photo ? (
           <Image
@@ -212,7 +197,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#007AFF", // Color por defecto
+    backgroundColor: "#007AFF",
   },
   initialsText: {
     fontSize: 20,
@@ -262,4 +247,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeviceCard;
+export default DeviceListCard;

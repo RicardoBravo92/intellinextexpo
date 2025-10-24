@@ -1,4 +1,4 @@
-import ModuleCard from "@/components/ModuleCard";
+import ModuleItemCard from "@/components/ModuleItemCard";
 import { useAuthStore } from "@/store/authStore";
 import { useLocalSearchParams } from "expo-router";
 import { Text } from "react-native";
@@ -19,7 +19,7 @@ export default function ModuleDetailScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 20 }}>
-      <ModuleCard {...module} />
+      <ModuleItemCard {...module} />
     </SafeAreaView>
   );
 }

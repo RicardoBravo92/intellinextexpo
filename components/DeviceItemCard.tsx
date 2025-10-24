@@ -19,8 +19,8 @@ const DeviceItemCard = (device: Device) => {
   } = settings_device;
 
   const getStatusColor = (online: number, disabled?: number) => {
-    if (disabled === 1) return "#ff6b6b"; // Red for disabled
-    return online === 1 ? "#51cf66" : "#ffd43b"; // Green for online, yellow for offline
+    if (disabled === 1) return "#ff6b6b";
+    return online === 1 ? "#51cf66" : "#ffd43b";
   };
 
   const getStatusText = (online: number, disabled?: number) => {
@@ -75,7 +75,6 @@ const DeviceItemCard = (device: Device) => {
 
   return (
     <View style={styles.card}>
-      {/* Header with device name and status */}
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Text style={styles.cardTitle}>{device_name}</Text>
@@ -93,7 +92,6 @@ const DeviceItemCard = (device: Device) => {
         </View>
       </View>
 
-      {/* Device ID and Serial */}
       <View style={styles.row}>
         <Text style={styles.label}>Device ID:</Text>
         <Text style={styles.value}>{id_device}</Text>
@@ -104,7 +102,6 @@ const DeviceItemCard = (device: Device) => {
         <Text style={styles.value}>{serial}</Text>
       </View>
 
-      {/* Connection Settings */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Access Control</Text>
 
@@ -128,7 +125,6 @@ const DeviceItemCard = (device: Device) => {
         )}
       </View>
 
-      {/* Network Settings */}
       {(wifi_settings || ethernet_settings) && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Network Configuration</Text>
@@ -137,8 +133,6 @@ const DeviceItemCard = (device: Device) => {
             renderNetworkInfo(ethernet_settings, "Ethernet")}
         </View>
       )}
-
-      {/* Additional Info */}
       <View style={styles.footer}>
         <View style={styles.row}>
           <Text style={styles.label}>Timezone ID:</Text>
@@ -263,7 +257,6 @@ const styles = StyleSheet.create({
     color: "#333",
     fontWeight: "400",
   },
-  // Keeping your original styles for completeness
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
