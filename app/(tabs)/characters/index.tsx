@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   RefreshControl,
   StyleSheet,
@@ -115,13 +114,8 @@ export default function CharactersScreen() {
     );
   };
 
-  React.useEffect(() => {
-    if (isError && error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to load characters";
-      Alert.alert("Error", errorMessage);
-    }
-  }, [isError, error]);
+  // Show loading overlay only on initial load
+  const showLoadingOverlay = isLoading && !isFetchingNextPage;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -155,7 +149,7 @@ export default function CharactersScreen() {
       </View>
 
       {/* Characters Count */}
-      {!isLoading && (
+      {!isLoading && characters.length > 0 && (
         <View style={styles.countContainer}>
           <Text style={styles.countText}>
             {characters.length} character{characters.length !== 1 ? "s" : ""}
@@ -166,19 +160,16 @@ export default function CharactersScreen() {
 
       {/* Characters List */}
       {isError ? (
-        <View style={styles.errorContainer}>
-          <Ionicons name="warning-outline" size={48} color="#dc3545" />
-          <Text style={styles.errorText}>
-            {error instanceof Error
-              ? error.message
-              : "Failed to load characters"}
+        <View style={styles.emptyState}>
+          <Ionicons name="people" size={64} color="#ccc" />
+          <Text style={styles.emptyStateTitle}>
+            {search ? "No characters found" : "No characters"}
           </Text>
-          <TouchableOpacity
-            style={styles.retryButton}
-            onPress={() => refetch()}
-          >
-            <Text style={styles.retryButtonText}>Try Again</Text>
-          </TouchableOpacity>
+          <Text style={styles.emptyStateText}>
+            {search
+              ? "Try adjusting your search terms"
+              : "Devices will appear here once added"}
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -206,7 +197,7 @@ export default function CharactersScreen() {
       )}
 
       {/* Loading Overlay */}
-      {isLoading && !isFetchingNextPage && (
+      {showLoadingOverlay && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#007AFF" />
           <Text style={styles.loadingText}>Loading characters...</Text>
