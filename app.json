@@ -4,12 +4,12 @@
     "slug": "IntelliNextexpo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/intellinext.avif",
+    "icon": "./assets/images/myintelli.jpg",
     "scheme": "intellinextexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/intellinext.avif",
+      "image": "./assets/images/myintelli.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -42,6 +42,12 @@
       "eas": {
         "projectId": "69b8427c-3b00-4ced-81ca-1151367f7718"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/69b8427c-3b00-4ced-81ca-1151367f7718"
     }
   }
 }
