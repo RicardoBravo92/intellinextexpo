@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { Module } from "../types";
 
 const ModuleItemCard = (module: Module) => {
+  const { width: windowWidth } = useWindowDimensions();
   const {
     id_module,
     module: moduleName,
@@ -48,14 +49,26 @@ const ModuleItemCard = (module: Module) => {
     );
   };
 
+  // Determine if we're on a small screen
+  const isSmallScreen = windowWidth < 375;
+
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, isSmallScreen && styles.cardSmall]}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          <Text style={styles.cardTitle} numberOfLines={1}>
+          <Text
+            style={[styles.cardTitle, isSmallScreen && styles.cardTitleSmall]}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
             {key || moduleName}
           </Text>
-          <Text style={styles.connectionType}>
+          <Text
+            style={[
+              styles.connectionType,
+              isSmallScreen && styles.connectionTypeSmall,
+            ]}
+          >
             {route ? `Route: ${route}` : "No Route"}
           </Text>
         </View>
@@ -63,49 +76,99 @@ const ModuleItemCard = (module: Module) => {
           style={[
             styles.statusBadge,
             { backgroundColor: getStatusColor(is_render, is_render_mobile) },
+            isSmallScreen && styles.statusBadgeSmall,
           ]}
         >
-          <Text style={styles.statusText}>
+          <Text
+            style={[styles.statusText, isSmallScreen && styles.statusTextSmall]}
+          >
             {getStatusText(is_render, is_render_mobile)}
           </Text>
         </View>
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Module ID:</Text>
-        <Text style={styles.value}>{id_module}</Text>
+        <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+          Module ID:
+        </Text>
+        <Text style={[styles.value, isSmallScreen && styles.valueSmall]}>
+          {id_module}
+        </Text>
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Module Name:</Text>
-        <Text style={styles.value}>{moduleName}</Text>
+        <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+          Module Name:
+        </Text>
+        <Text
+          style={[
+            styles.value,
+            isSmallScreen && styles.valueSmall,
+            styles.moduleName,
+          ]}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
+          {moduleName}
+        </Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Configuration</Text>
+        <Text
+          style={[
+            styles.sectionTitle,
+            isSmallScreen && styles.sectionTitleSmall,
+          ]}
+        >
+          Configuration
+        </Text>
 
         <View style={styles.row}>
-          <Text style={styles.label}>Path:</Text>
-          <Text style={styles.value}>{path}</Text>
+          <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+            Path:
+          </Text>
+          <Text
+            style={[styles.value, isSmallScreen && styles.valueSmall]}
+            numberOfLines={1}
+            ellipsizeMode="middle"
+          >
+            {path}
+          </Text>
         </View>
 
         {route && (
           <View style={styles.row}>
-            <Text style={styles.label}>Route:</Text>
-            <Text style={styles.value}>{route}</Text>
+            <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+              Route:
+            </Text>
+            <Text
+              style={[styles.value, isSmallScreen && styles.valueSmall]}
+              numberOfLines={1}
+              ellipsizeMode="middle"
+            >
+              {route}
+            </Text>
           </View>
         )}
 
         {position && (
           <View style={styles.row}>
-            <Text style={styles.label}>Position:</Text>
-            <Text style={styles.value}>{position}</Text>
+            <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+              Position:
+            </Text>
+            <Text style={[styles.value, isSmallScreen && styles.valueSmall]}>
+              {position}
+            </Text>
           </View>
         )}
 
         <View style={styles.row}>
-          <Text style={styles.label}>Order:</Text>
-          <Text style={styles.value}>{order}</Text>
+          <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+            Order:
+          </Text>
+          <Text style={[styles.value, isSmallScreen && styles.valueSmall]}>
+            {order}
+          </Text>
         </View>
       </View>
 
@@ -113,23 +176,35 @@ const ModuleItemCard = (module: Module) => {
 
       <View style={styles.footer}>
         <View style={styles.row}>
-          <Text style={styles.label}>Web Render:</Text>
-          <Text style={styles.value}>
+          <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+            Web Render:
+          </Text>
+          <Text style={[styles.value, isSmallScreen && styles.valueSmall]}>
             {is_render === 1 ? "Enabled" : "Disabled"}
           </Text>
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.label}>Mobile Render:</Text>
-          <Text style={styles.value}>
+          <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+            Mobile Render:
+          </Text>
+          <Text style={[styles.value, isSmallScreen && styles.valueSmall]}>
             {is_render_mobile === 1 ? "Enabled" : "Disabled"}
           </Text>
         </View>
 
         {icon && (
           <View style={styles.row}>
-            <Text style={styles.label}>Icon:</Text>
-            <Text style={styles.value}>{icon}</Text>
+            <Text style={[styles.label, isSmallScreen && styles.labelSmall]}>
+              Icon:
+            </Text>
+            <Text
+              style={[styles.value, isSmallScreen && styles.valueSmall]}
+              numberOfLines={1}
+              ellipsizeMode="middle"
+            >
+              {icon}
+            </Text>
           </View>
         )}
       </View>
@@ -149,6 +224,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  cardSmall: {
+    padding: 16,
+    marginHorizontal: 8,
+    marginBottom: 8,
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -157,28 +237,46 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
+    marginRight: 12,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: "#333",
     marginBottom: 4,
+    flexShrink: 1,
+  },
+  cardTitleSmall: {
+    fontSize: 16,
   },
   connectionType: {
     fontSize: 12,
     color: "#666",
     fontWeight: "500",
   },
+  connectionTypeSmall: {
+    fontSize: 11,
+  },
   statusBadge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    marginLeft: 8,
+    minWidth: 80,
+    alignItems: "center",
+  },
+  statusBadgeSmall: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    minWidth: 70,
   },
   statusText: {
     color: "white",
     fontSize: 12,
     fontWeight: "600",
+    textAlign: "center",
+  },
+  statusTextSmall: {
+    fontSize: 10,
   },
   section: {
     marginBottom: 16,
@@ -191,6 +289,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#555",
     marginBottom: 12,
+  },
+  sectionTitleSmall: {
+    fontSize: 13,
   },
   operationsGrid: {
     flexDirection: "row",
@@ -216,18 +317,32 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 6,
   },
   label: {
     fontSize: 14,
     color: "#666",
     fontWeight: "500",
+    flexShrink: 0,
+    marginRight: 8,
+  },
+  labelSmall: {
+    fontSize: 13,
   },
   value: {
     fontSize: 14,
     color: "#333",
     fontWeight: "400",
+    flex: 1,
+    textAlign: "right",
+    flexWrap: "wrap",
+  },
+  valueSmall: {
+    fontSize: 13,
+  },
+  moduleName: {
+    flexShrink: 1,
   },
   container: {
     flex: 1,

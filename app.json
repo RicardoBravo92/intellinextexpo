@@ -4,12 +4,12 @@
     "slug": "IntelliNextexpo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/intellinext.avif",
     "scheme": "intellinextexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/intellinext.avif",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

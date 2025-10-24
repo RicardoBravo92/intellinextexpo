@@ -41,7 +41,16 @@ export default function TabsLayout() {
           ),
         }}
       />
-
+      <Tabs.Screen
+        name="characters/index"
+        options={{
+          title: "Characters",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="devices/[id]"
         options={{
