@@ -2,94 +2,140 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Module } from "../types";
 
-const ModuleItemCard = ({
-  module,
-  id_module,
-  setting_module_config,
-  path,
-  order,
-  is_render_mobile,
-  operations,
-  is_render,
-}: Module) => {
-  const CardContent = (
-    <View style={[styles.card && styles.selectedCard]}>
+const ModuleItemCard = (module: Module) => {
+  const {
+    id_module,
+    module: moduleName,
+    setting_module_config,
+    path,
+    order,
+    is_render_mobile,
+    operations,
+    is_render,
+  } = module;
+
+  const { key, icon, route, position } = setting_module_config;
+
+  const getStatusColor = (is_render: number, is_render_mobile: number) => {
+    if (is_render === 1 && is_render_mobile === 1) return "#51cf66";
+    if (is_render === 1) return "#339af0";
+    if (is_render_mobile === 1) return "#ffd43b";
+    return "#868e96";
+  };
+
+  const getStatusText = (is_render: number, is_render_mobile: number) => {
+    if (is_render === 1 && is_render_mobile === 1)
+      return "Active (Web & Mobile)";
+    if (is_render === 1) return "Web Only";
+    if (is_render_mobile === 1) return "Mobile Only";
+    return "Inactive";
+  };
+
+  const renderOperations = (operations: number[] | undefined) => {
+    if (!operations || operations.length === 0) return null;
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Operations</Text>
+        <View style={styles.operationsGrid}>
+          {operations.map((operation, index) => (
+            <View key={index} style={styles.operationBadge}>
+              <Text style={styles.operationText}>{operation}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          {setting_module_config.key && (
-            <Text style={styles.cardTitle} numberOfLines={1}>
-              {setting_module_config.key}
-            </Text>
-          )}
-          <Text style={styles.moduleId}>ID: {id_module}</Text>
+          <Text style={styles.cardTitle} numberOfLines={1}>
+            {key || moduleName}
+          </Text>
+          <Text style={styles.connectionType}>
+            {route ? `Route: ${route}` : "No Route"}
+          </Text>
         </View>
-        {setting_module_config.icon && (
-          <Text style={styles.icon}>{setting_module_config.icon}</Text>
-        )}
+        <View
+          style={[
+            styles.statusBadge,
+            { backgroundColor: getStatusColor(is_render, is_render_mobile) },
+          ]}
+        >
+          <Text style={styles.statusText}>
+            {getStatusText(is_render, is_render_mobile)}
+          </Text>
+        </View>
       </View>
 
-      <Text style={styles.moduleName} numberOfLines={1}>
-        {module}
-      </Text>
+      <View style={styles.row}>
+        <Text style={styles.label}>Module ID:</Text>
+        <Text style={styles.value}>{id_module}</Text>
+      </View>
 
-      <Text style={styles.path} numberOfLines={1}>
-        Path: {path}
-      </Text>
+      <View style={styles.row}>
+        <Text style={styles.label}>Module Name:</Text>
+        <Text style={styles.value}>{moduleName}</Text>
+      </View>
 
-      {setting_module_config.route && (
-        <Text style={styles.route} numberOfLines={1}>
-          Route: {setting_module_config.route}
-        </Text>
-      )}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Configuration</Text>
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Path:</Text>
+          <Text style={styles.value}>{path}</Text>
+        </View>
+
+        {route && (
+          <View style={styles.row}>
+            <Text style={styles.label}>Route:</Text>
+            <Text style={styles.value}>{route}</Text>
+          </View>
+        )}
+
+        {position && (
+          <View style={styles.row}>
+            <Text style={styles.label}>Position:</Text>
+            <Text style={styles.value}>{position}</Text>
+          </View>
+        )}
+
+        <View style={styles.row}>
+          <Text style={styles.label}>Order:</Text>
+          <Text style={styles.value}>{order}</Text>
+        </View>
+      </View>
+
+      {renderOperations(operations)}
 
       <View style={styles.footer}>
-        <View style={styles.metaInfo}>
-          {setting_module_config.position && (
-            <Text style={styles.position}>
-              Position: {setting_module_config.position}
-            </Text>
-          )}
-          <Text style={styles.order}>Order: {order}</Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Web Render:</Text>
+          <Text style={styles.value}>
+            {is_render === 1 ? "Enabled" : "Disabled"}
+          </Text>
         </View>
 
-        <View style={styles.statusContainer}>
-          <View
-            style={[
-              styles.statusIndicator,
-              is_render === 1 && styles.activeStatus,
-            ]}
-          >
-            <Text style={styles.statusText}>
-              {is_render === 1 ? "Active" : "Inactive"}
-            </Text>
-          </View>
-
-          <View
-            style={[
-              styles.statusIndicator,
-              is_render_mobile === 1 && styles.mobileActiveStatus,
-            ]}
-          >
-            <Text style={styles.statusText}>
-              Mobile: {is_render_mobile === 1 ? "Yes" : "No"}
-            </Text>
-          </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Mobile Render:</Text>
+          <Text style={styles.value}>
+            {is_render_mobile === 1 ? "Enabled" : "Disabled"}
+          </Text>
         </View>
+
+        {icon && (
+          <View style={styles.row}>
+            <Text style={styles.label}>Icon:</Text>
+            <Text style={styles.value}>{icon}</Text>
+          </View>
+        )}
       </View>
-
-      {operations && operations.length > 0 && (
-        <View style={styles.operationsContainer}>
-          <Text style={styles.operationsLabel}>Operations:</Text>
-          <Text style={styles.operationsList}>{operations.join(", ")}</Text>
-        </View>
-      )}
     </View>
   );
-
-  return CardContent;
 };
-
-export default ModuleItemCard;
 
 const styles = StyleSheet.create({
   card: {
@@ -103,16 +149,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  selectedCard: {
-    backgroundColor: "#f0f8ff",
-    borderColor: "#007AFF",
-    borderWidth: 2,
-  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 12,
+    marginBottom: 16,
   },
   titleContainer: {
     flex: 1,
@@ -123,86 +164,70 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
-  moduleId: {
+  connectionType: {
     fontSize: 12,
     color: "#666",
     fontWeight: "500",
   },
-  icon: {
-    fontSize: 20,
+  statusBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
     marginLeft: 8,
   },
-  moduleName: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#444",
-    marginBottom: 8,
-  },
-  path: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 4,
-  },
-  route: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 12,
-    fontStyle: "italic",
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    marginTop: 8,
-  },
-  metaInfo: {
-    flex: 1,
-  },
-  position: {
-    fontSize: 12,
-    color: "#666",
-    marginBottom: 2,
-  },
-  order: {
-    fontSize: 12,
-    color: "#666",
-  },
-  statusContainer: {
-    alignItems: "flex-end",
-  },
-  statusIndicator: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: "#f0f0f0",
-    marginBottom: 4,
-  },
-  activeStatus: {
-    backgroundColor: "#d4edda",
-  },
-  mobileActiveStatus: {
-    backgroundColor: "#d1ecf1",
-  },
   statusText: {
-    fontSize: 10,
-    fontWeight: "500",
-    color: "#333",
-  },
-  operationsContainer: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#f0f0f0",
-  },
-  operationsLabel: {
+    color: "white",
     fontSize: 12,
     fontWeight: "600",
-    color: "#666",
-    marginBottom: 4,
   },
-  operationsList: {
-    fontSize: 11,
-    color: "#888",
+  section: {
+    marginBottom: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#555",
+    marginBottom: 12,
+  },
+  operationsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  operationBadge: {
+    backgroundColor: "#e7f5ff",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#a5d8ff",
+  },
+  operationText: {
+    fontSize: 12,
+    color: "#1864ab",
+    fontWeight: "500",
+  },
+  footer: {
+    marginBottom: 8,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 6,
+  },
+  label: {
+    fontSize: 14,
+    color: "#666",
+    fontWeight: "500",
+  },
+  value: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "400",
   },
   container: {
     flex: 1,
@@ -236,3 +261,5 @@ const styles = StyleSheet.create({
     color: "#888",
   },
 });
+
+export default ModuleItemCard;
