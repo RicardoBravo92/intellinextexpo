@@ -127,7 +127,7 @@ export default function WelcomeScreen() {
           <>
             <TouchableOpacity
               style={styles.primaryButton}
-              onPress={() => router.push("/(tabs)")}
+              onPress={() => router.push("/modules")}
             >
               <Ionicons name="rocket" size={20} color="#fff" />
               <Text style={styles.primaryButtonText}>Launch App</Text>

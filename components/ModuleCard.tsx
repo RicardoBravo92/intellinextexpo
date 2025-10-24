@@ -1,11 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Module } from "../types";
-
-interface ModuleCardProps extends Module {
-  onPress?: () => void;
-  isSelected?: boolean;
-}
 
 const ModuleCard = ({
   module,
@@ -16,11 +11,9 @@ const ModuleCard = ({
   is_render_mobile,
   operations,
   is_render,
-  onPress,
-  isSelected = false,
-}: ModuleCardProps) => {
+}: Module) => {
   const CardContent = (
-    <View style={[styles.card, isSelected && styles.selectedCard]}>
+    <View style={[styles.card && styles.selectedCard]}>
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.titleContainer}>
@@ -96,10 +89,6 @@ const ModuleCard = ({
       )}
     </View>
   );
-
-  if (onPress) {
-    return <TouchableOpacity onPress={onPress}>{CardContent}</TouchableOpacity>;
-  }
 
   return CardContent;
 };

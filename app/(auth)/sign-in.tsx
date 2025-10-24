@@ -60,20 +60,13 @@ export default function SignIn() {
 
       const response = await authLogin(email, password);
 
-      if (response && "data" in response) {
+      if (response) {
         setAuthData(response.data);
         Alert.alert("Success", "You have successfully logged in");
         router.replace("/");
         setError("");
-      } else if (response && "error" in response) {
-        setError(response.error.message);
-        Alert.alert("Login Failed", response.error.message);
-      } else {
-        setError("Unexpected response from server");
-        Alert.alert("Error", "Unexpected response from server");
       }
     } catch (err: any) {
-      console.log(err);
       if (err.response?.data?.msg === "invalid_credentials") {
         setError("Invalid credentials");
         Alert.alert("Login Failed", "Invalid credentials");
