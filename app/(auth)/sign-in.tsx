@@ -59,7 +59,7 @@ export default function SignIn() {
 
       if (response) {
         setAuthData(response.data);
-        Alert.alert("Success", "You have successfully logged in");
+        Alert.alert("Welcome back");
         router.replace("/");
         setError("");
       }
